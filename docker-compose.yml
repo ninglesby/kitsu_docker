@@ -85,6 +85,26 @@ services:
       - 4434:443
 volumes:
   db_data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${DOCKER_VOLUME_ROOT}/db_data'
   zou_previews:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${DOCKER_VOLUME_ROOT}/zou_previews'
   tmp:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${DOCKER_VOLUME_ROOT}/tmp'
   logs:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '${DOCKER_VOLUME_ROOT}/logs'
