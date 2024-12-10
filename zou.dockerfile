@@ -1,9 +1,18 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 
 RUN apt-get update
 
-RUN apt-get install -y python3 python3-pip ffmpeg postgresql-client dos2unix
+# third party software
+RUN apt-get install -y xmlsec1 ffmpeg postgresql-client dos2unix
+
+# python 3.12
+run apt-get install -y software-properties-common &&\
+    add-apt-repository ppa:deadsnakes/ppa -y &&\
+    apt-get update &&\
+    apt-get install python3.12 python3.12-venv python3.12-dev
+
+# create zou user
 RUN useradd --home /opt/zou zou &&\
     mkdir /opt/zou &&\
     chown zou: /opt/zou &&\
@@ -12,11 +21,11 @@ RUN useradd --home /opt/zou zou &&\
 
 WORKDIR /opt/zou
 
-RUN pip3 install virtualenv &&\
-    virtualenv zouenv &&\
+# install zou and its dependencies:
+RUN python3.12 -m venvzouenv &&\
     . zouenv/bin/activate &&\
-    zouenv/bin/pip3 install zou &&\
-    zouenv/bin/pip3 install boto3
+    zouenv/bin/python -m pip install --upgrade pip &&\
+    zouenv/bin/python -m pip install zou &&\
 
 RUN mkdir /opt/zou/previews &&\
     mkdir /opt/zou/tmp &&\
